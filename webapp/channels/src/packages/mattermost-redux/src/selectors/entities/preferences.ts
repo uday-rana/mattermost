@@ -215,6 +215,14 @@ export function shouldShowJoinLeaveMessages(state: GlobalState) {
     return getBool(state, Preferences.CATEGORY_ADVANCED_SETTINGS, Preferences.ADVANCED_FILTER_JOIN_LEAVE, enableJoinLeaveMessage);
 }
 
+export function shouldRenderEmoticonsAsEmoji(state: GlobalState) {
+    const config = getConfig(state);
+    const enableRenderEmoticonsAsEmoji = config.EnableRenderEmoticonsAsEmoji === 'true';
+
+    // This setting is true or not set if join/leave messages are to be displayed
+    return getBool(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.RENDER_EMOTICONS_AS_EMOJI, enableRenderEmoticonsAsEmoji);
+}
+
 // shouldShowUnreadsCategory returns true if the user has unereads grouped separately with the new sidebar enabled.
 export const shouldShowUnreadsCategory: (state: GlobalState, userPreferences?: PreferencesType) => boolean = createSelector(
     'shouldShowUnreadsCategory',
