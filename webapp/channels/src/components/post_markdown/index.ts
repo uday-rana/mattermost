@@ -14,7 +14,7 @@ import {
     getMyGroupMentionKeysForChannel,
     getMyGroupMentionKeys,
 } from 'mattermost-redux/selectors/entities/groups';
-import {getBool} from 'mattermost-redux/selectors/entities/preferences';
+import {getBool, shouldRenderEmoticonsAsEmoji} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentTeam} from 'mattermost-redux/selectors/entities/teams';
 import {getCurrentTimezone} from 'mattermost-redux/selectors/entities/timezone';
 import {getCurrentUserMentionKeys, getHighlightWithoutNotificationKeys} from 'mattermost-redux/selectors/entities/users';
@@ -82,6 +82,7 @@ function makeMapStateToProps() {
             hideGuestTags: getConfig(state).HideGuestTags === 'true',
             isEnterpriseOrCloudOrSKUStarterFree: isEnterpriseOrCloudOrSKUStarterFree(license, subscriptionProduct, isEnterpriseReady),
             isEnterpriseReady,
+            renderEmoticonsAsEmoji: shouldRenderEmoticonsAsEmoji(state),
         };
     };
 }

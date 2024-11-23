@@ -230,6 +230,13 @@ export interface TextFormattingOptionsBase {
      * Defaults to `false`.
      */
     unsafeLinks: boolean;
+
+    /**
+     * Whether or not to render text emoticons (:D) as emojis
+     *
+     * Defaults to `true`.
+     */
+    renderEmoticonsAsEmoji: boolean;
 }
 
 export type TextFormattingOptions = Partial<TextFormattingOptionsBase>;
@@ -258,6 +265,7 @@ const DEFAULT_OPTIONS: TextFormattingOptions = {
     editedAt: 0,
     postId: '',
     unsafeLinks: false,
+    renderEmoticonsAsEmoji: true,
 };
 
 /**
@@ -401,7 +409,11 @@ export function doFormatText(text: string, options: TextFormattingOptions, emoji
         output = autolinkHashtags(output, tokens, options.minimumHashtagLength);
 
         if (!('emoticons' in options) || options.emoticons) {
-            output = Emoticons.handleEmoticons(output, tokens);
+            if (!('renderEmoticonsAsEmoji' in options) || options.renderEmoticonsAsEmoji) {
+                output = Emoticons.handleEmoticons(output, tokens, true);
+            } else {
+                output = Emoticons.handleEmoticons(output, tokens, false);
+            }
         }
 
         if (options.searchPatterns) {
