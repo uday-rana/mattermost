@@ -18,12 +18,11 @@ import RenderEmoticonsAsEmojiSection from './render_emoticons_as_emojis';
 
 export function mapStateToProps(state: GlobalState, props: OwnProps) {
     const config = getConfig(state);
-    const renderEmoticonsAsEmoji = config.EnableRenderEmoticonsAsEmoji === 'true';
     const userPreference = props.adminMode && props.userPreferences ? props.userPreferences : undefined;
 
     return {
         userId: props.adminMode ? props.userId : getCurrentUserId(state),
-        renderEmoticonsAsEmoji: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.RENDER_EMOTICONS_AS_EMOJI, renderEmoticonsAsEmoji.toString(), userPreference),
+        renderEmoticonsAsEmoji: get(state, Preferences.CATEGORY_DISPLAY_SETTINGS, Preferences.RENDER_EMOTICONS_AS_EMOJI, Preferences.RENDER_EMOTICONS_AS_EMOJI_DEFAULT, userPreference),
     };
 }
 
