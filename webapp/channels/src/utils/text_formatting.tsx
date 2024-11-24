@@ -409,11 +409,7 @@ export function doFormatText(text: string, options: TextFormattingOptions, emoji
         output = autolinkHashtags(output, tokens, options.minimumHashtagLength);
 
         if (!('emoticons' in options) || options.emoticons) {
-            if (!('renderEmoticonsAsEmoji' in options) || options.renderEmoticonsAsEmoji) {
-                output = Emoticons.handleEmoticons(output, tokens, true);
-            } else {
-                output = Emoticons.handleEmoticons(output, tokens, false);
-            }
+            output = Emoticons.handleEmoticons(output, tokens, options.renderEmoticonsAsEmoji);
         }
 
         if (options.searchPatterns) {
