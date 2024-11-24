@@ -6,10 +6,10 @@ import {bindActionCreators} from 'redux';
 import type {Dispatch} from 'redux';
 
 import {savePreferences} from 'mattermost-redux/actions/preferences';
-import {Preferences} from 'mattermost-redux/constants';
-import {getConfig} from 'mattermost-redux/selectors/entities/general';
 import {get} from 'mattermost-redux/selectors/entities/preferences';
 import {getCurrentUserId} from 'mattermost-redux/selectors/entities/users';
+
+import {Preferences} from 'utils/constants';
 
 import type {GlobalState} from 'types/store';
 
@@ -17,7 +17,6 @@ import type {OwnProps} from './render_emoticons_as_emojis';
 import RenderEmoticonsAsEmojiSection from './render_emoticons_as_emojis';
 
 export function mapStateToProps(state: GlobalState, props: OwnProps) {
-    const config = getConfig(state);
     const userPreference = props.adminMode && props.userPreferences ? props.userPreferences : undefined;
 
     return {
