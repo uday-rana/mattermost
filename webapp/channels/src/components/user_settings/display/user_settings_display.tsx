@@ -48,6 +48,7 @@ function getDisplayStateFromProps(props: Props) {
         lastActiveDisplay: props.lastActiveDisplay.toString(),
         oneClickReactionsOnPosts: props.oneClickReactionsOnPosts,
         clickToReply: props.clickToReply,
+        renderEmoticonsAsEmoji: props.renderEmoticonsAsEmoji,
     };
 }
 
@@ -119,6 +120,7 @@ type Props = OwnProps & {
     oneClickReactionsOnPosts: string;
     emojiPickerEnabled: boolean;
     timezoneLabel: string;
+    renderEmoticonsAsEmoji: string;
     lastActiveDisplay: boolean;
     lastActiveTimeEnabled: boolean;
     actions: {
@@ -141,6 +143,7 @@ type State = {
     collapseDisplay: string;
     collapsedReplyThreads: string;
     linkPreviewDisplay: string;
+    renderEmoticonsAsEmoji: string;
     lastActiveDisplay: string;
     oneClickReactionsOnPosts: string;
     clickToReply: string;
@@ -187,6 +190,9 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
 
     componentDidUpdate(prevProps: Props) {
         if (this.props.teammateNameDisplay !== prevProps.teammateNameDisplay) {
+            this.updateState();
+        }
+        if (this.props.renderEmoticonsAsEmoji !== prevProps.renderEmoticonsAsEmoji) {
             this.updateState();
         }
     }
@@ -301,6 +307,12 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             name: Preferences.CLICK_TO_REPLY,
             value: this.state.clickToReply,
         };
+        const renderEmoticonsAsEmojiPreference = {
+            user_id: userId,
+            category: Preferences.CATEGORY_DISPLAY_SETTINGS,
+            name: Preferences.RENDER_EMOTICONS_AS_EMOJI,
+            value: this.state.renderEmoticonsAsEmoji,
+        };
 
         this.setState({isSaving: true});
 
@@ -316,6 +328,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             availabilityStatusOnPostsPreference,
             oneClickReactionsOnPostsPreference,
             colorizeUsernamesPreference,
+            renderEmoticonsAsEmojiPreference,
         ];
 
         this.trackChangeIfNecessary(collapsedReplyThreadsPreference, this.props.collapsedReplyThreads);
@@ -359,6 +372,10 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
 
     handleLinkPreviewRadio(linkPreviewDisplay: string) {
         this.setState({linkPreviewDisplay});
+    }
+
+    handleRenderEmoticonsAsEmojiRadio(renderEmoticonsAsEmoji: string) {
+        this.setState({renderEmoticonsAsEmoji});
     }
 
     handleOneClickReactionsRadio = (oneClickReactionsOnPosts: string) => {
@@ -1149,6 +1166,39 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
             });
         }
 
+        const renderEmoticonsAsEmojisSection = this.createSection({
+            section: Preferences.RENDER_EMOTICONS_AS_EMOJI,
+            display: 'renderEmoticonsAsEmoji',
+            value: this.state.renderEmoticonsAsEmoji,
+            defaultDisplay: 'true',
+            title: defineMessage({
+                id: 'user.settings.display.renderEmoticonsAsEmojisTitle',
+                defaultMessage: 'Auto-render emoticons as emojis',
+            }),
+            firstOption: {
+                value: 'true',
+                radionButtonText: {
+                    label: defineMessage({
+                        id: 'user.settings.display.renderEmoticonsAsEmojisOn',
+                        defaultMessage: 'On',
+                    }),
+                },
+            },
+            secondOption: {
+                value: 'false',
+                radionButtonText: {
+                    label: defineMessage({
+                        id: 'user.settings.display.renderEmoticonsAsEmojisOff',
+                        defaultMessage: 'Off',
+                    }),
+                },
+            },
+            description: defineMessage({
+                id: 'user.settings.display.renderEmoticonsAsEmojisDescription',
+                defaultMessage: 'When enabled, text emoticons in messages will automatically be rendered as emojis (For example :D as 😄)',
+            }),
+        });
+
         return (
             <div id='displaySettings'>
                 <SettingMobileHeader
@@ -1185,6 +1235,7 @@ export default class UserSettingsDisplay extends React.PureComponent<Props, Stat
                     {clickToReply}
                     {channelDisplayModeSection}
                     {oneClickReactionsOnPostsSection}
+                    {renderEmoticonsAsEmojisSection}
                     {languagesSection}
                 </div>
             </div>
